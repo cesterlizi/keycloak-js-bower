@@ -121,6 +121,9 @@
             var configPromise = loadConfig(config);
 
             function onLoad() {
+                var options = {
+                    scope: initOptions.scope
+                };
                 var doLogin = function(prompt) {
                     if (!prompt) {
                         options.prompt = 'none';
@@ -132,7 +135,7 @@
                     });
                 }
 
-                var options = {};
+             
                 switch (initOptions.onLoad) {
                     case 'check-sso':
                         if (loginIframe.enable) {
@@ -166,7 +169,7 @@
                         initPromise.setError();
                     });
                 } else if (initOptions) {
-                    if (initOptions.token && initOptions.refreshToken) {
+                    if (initOptions.token || initOptions.refreshToken) {
                         setToken(initOptions.token, initOptions.refreshToken, initOptions.idToken);
 
                         if (loginIframe.enable) {
@@ -237,7 +240,7 @@
                 action = 'registrations';
             }
 
-            var scope = (options && options.scope) ? "openid " + options.scope : "openid";
+            var scope = (options && options.scope) ? options.scope : "openid";
 
             var url = getRealmUrl()
                 + '/protocol/openid-connect/' + action
